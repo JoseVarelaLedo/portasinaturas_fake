@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\SolicitanteRequest;
 use Illuminate\View\View;
 use App\Models\Solicitante;
 
@@ -18,11 +18,10 @@ class SolicitanteController extends Controller
         return view('forms.solicitantecrear');
     }
 
-    public function store(Request $request)
+    public function store(SolicitanteRequest $request)
     {
         $solicitante = new Solicitante();
-        $solicitante->nome = $request->nome;
-        $solicitante->nif_cif = $request->nif_cif;
+        $solicitante->fill($request->all());
         $solicitante->save();
         return redirect()->route('solicitante.listado')->with('success','200');
     }

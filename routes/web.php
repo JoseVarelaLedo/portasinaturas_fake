@@ -10,12 +10,13 @@ use App\Http\Controllers\EmendaController;
 use App\Http\Controllers\RemesaController;
 
 
-Route::view('/','index')->name('index');
+Route::view('/','layouts.principal')->name('index');
 
 Route::get('/solicitante/crear', [SolicitanteController::class, 'create'])->name('solicitante.crear');
 Route::get('/solicitante/listado', [SolicitanteController::class, 'index'])->name('solicitante.listado');
 Route::post('/solicitante/store', [SolicitanteController::class, 'store'])->name('solicitante.store');
 Route::get('/entidade/crear', [EntidadeController::class, 'create'])->name('entidade.crear');
+Route::post('/entidade/store', [EntidadeController::class, 'store'])->name('entidade.store');
 Route::get('/entidade/listado', [EntidadeController::class, 'index'])->name('entidade.listado');
 Route::get('/usuario_admin/crear', [UsuarioAdministrativoController::class,'create'])->name('usuario_administrativo.crear');
 Route::get('/usuario_admin/listado', [UsuarioAdministrativoController::class,'index'])->name('usuario_administrativo.listado');

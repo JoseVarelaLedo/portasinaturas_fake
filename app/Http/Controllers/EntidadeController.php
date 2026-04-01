@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\EntidadeRequest;
 use Illuminate\View\View;
 use App\Models\Entidade;
 
@@ -14,13 +14,16 @@ class EntidadeController extends Controller
         return view("layouts._partials.entidades", compact("entidades"));
     }
 
-    public function create()
+    public function create(): View
     {
-        //TODO
+        return view("forms.entidadecrear");
     }
 
-    public function store(Request $request)
+    public function store(EntidadeRequest $request)
     {
-        //TODO
+        $entidade = new Entidade();
+        $entidade->fill($request->all());
+        $entidade->save();
+        return redirect()->route("entidade.listado")->with("success","200");
     }
 }
