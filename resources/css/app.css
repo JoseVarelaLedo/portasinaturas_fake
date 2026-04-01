@@ -1,0 +1,194 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root {
+    --menu-bg-start: #0f172a;
+    --menu-bg-end: #1e293b;
+    --menu-pill: #f8fafc;
+    --menu-pill-text: #0f172a;
+    --menu-pill-hover: #e2e8f0;
+    --menu-shadow: 0 18px 40px -24px rgba(15, 23, 42, 0.9);
+    --page-bg: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+    --card-bg: rgba(255, 255, 255, 0.92);
+    --card-border: rgba(148, 163, 184, 0.24);
+    --field-border: #cbd5e1;
+    --field-focus: #0ea5e9;
+    --text-main: #0f172a;
+    --text-soft: #475569;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--text-main);
+    font-family: 'Instrument Sans', 'Segoe UI', sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    padding: 1.25rem 1rem;
+}
+
+header nav {
+    display: flex;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: min(980px, 100%);
+    padding: 0.65rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--menu-bg-start), var(--menu-bg-end));
+    box-shadow: var(--menu-shadow);
+}
+
+.menu_navegacion {
+    text-decoration: none;
+    color: var(--menu-pill-text);
+    background: var(--menu-pill);
+    font-family: 'Avenir Next', 'Segoe UI Variable Display', 'Bahnschrift', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    padding: 0.55rem 1rem;
+    margin:1rem;
+    border-radius: 30px;
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+    box-shadow: 0 8px 14px -12px rgba(15, 23, 42, 0.55);
+}
+
+.menu_navegacion:hover {
+    background-color: var(--menu-pill-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 20px -14px rgba(15, 23, 42, 0.8);
+}
+
+.menu_navegacion:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 2px;
+}
+
+.contedor_decorado {
+    width: min(560px, calc(100% - 2rem));
+    margin: 2rem auto 3rem;
+    padding: 2rem;
+    border: 1px solid var(--card-border);
+    border-radius: 1.5rem;
+    background: var(--card-bg);
+    box-shadow: 0 30px 60px -36px rgba(15, 23, 42, 0.45);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+.contedor_contido_decorado {
+    display: grid;
+    gap: 1.2rem;
+}
+
+.enlace_decorado {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 1.5rem;
+    color: #0369a1;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.enlace_inicio:hover {
+    color: #0f172a;
+}
+
+.campo_formulario {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.campo_formulario label {
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.campo_formulario input {
+    width: 100%;
+    padding: 0.95rem 1rem;
+    border: 1px solid var(--field-border);
+    border-radius: 0.95rem;
+    background: #ffffff;
+    color: var(--text-main);
+    font-size: 0.98rem;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    box-sizing: border-box;
+}
+
+.campo_formulario input::placeholder {
+    color: var(--text-soft);
+}
+
+.campo_formulario input:focus {
+    outline: none;
+    border-color: var(--field-focus);
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.14);
+    transform: translateY(-1px);
+}
+
+.boton_formulario {
+    justify-self: start;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.9rem 1.35rem;
+    background: linear-gradient(135deg, #0f172a, #0369a1);
+    color: #f8fafc;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+    box-shadow: 0 18px 28px -18px rgba(3, 105, 161, 0.75);
+}
+
+.boton_formulario:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 22px 34px -20px rgba(15, 23, 42, 0.8);
+}
+
+.boton_formulario:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+    header nav {
+        border-radius: 1.1rem;
+        justify-content: flex-start;
+    }
+
+    .menu_navegacion {
+        font-size: 0.82rem;
+        padding: 0.5rem 0.8rem;
+    }
+
+    .formulario_panel {
+        margin-top: 1.25rem;
+        padding: 1.2rem;
+        border-radius: 1.1rem;
+    }
+
+    .boton_formulario {
+        width: 100%;
+        justify-self: stretch;
+    }
+}
