@@ -8,7 +8,8 @@
                 @forelse ($solicitantes as $solicitante)
                     <li class="fila_elemento">
                         <span><b>Nome:</b> {{ $solicitante->nome }}, <b>NIF:</b> {{ $solicitante->nif_cif }}</span>
-                        <a class="boton_crearsolicitude" href="{{ route('solicitude.crear') }}">Nova Solicitude</a>
+                        <a class="boton_crearsolicitude"
+                            href="{{ route('solicitude.crear', ['solicitante_id' => $solicitante->id]) }}">Nova Solicitude</a>
                     </li>
                 @empty
                     <p><em>Sen datos</em></p>

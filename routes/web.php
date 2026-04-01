@@ -24,6 +24,7 @@ Route::get('/usuario_tecnico/crear', [UsuarioTecnicoController::class,'create'])
 Route::get('/usuario_tecnico/listado', [UsuarioTecnicoController::class,'index'])->name('usuario_tecnico.listado');
 Route::get('/solicitude/crear',[SolicitudeController::class,'create'])->name('solicitude.crear');
 Route::get('/solicitude/listado', [SolicitudeController::class,'index'])->name('solicitude.listado');
+Route::post('/solicitude/store', [SolicitudeController::class, 'store'])->name('solicitude.store');
 Route::get('/emenda/listado', [EmendaController::class,'index'])->name('emenda.listado');
 Route::get('/emenda/crear', [EmendaController::class,'create'])->name('emenda.crear');
 Route::get('/remesa/listado', [RemesaController::class, 'index'])->name('remesa.listado');

@@ -34,6 +34,24 @@ body {
     font-family: 'Instrument Sans', 'Segoe UI', sans-serif;
 }
 
+.contido-informativo ol,
+.contido-informativo ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.contido-informativo ol {
+    list-style: decimal;
+}
+
+.contido-informativo ul {
+    list-style: disc;
+}
+
+.contido-informativo li + li {
+    margin-top: 0.45rem;
+}
+
 .header_superior {
     background: rgba(255, 255, 255, 0.7);
     border-bottom: 1px solid rgba(148, 163, 184, 0.18);
@@ -184,6 +202,94 @@ body {
     background: rgba(248, 250, 252, 0.9);
 }
 
+.fila_elemento_solicitude {
+    justify-content: flex-start;
+}
+
+.boton_detalle_solicitude {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.8rem;
+    padding: 0.7rem 0.85rem;
+    background: #ffffff;
+    color: #0f172a;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.boton_detalle_solicitude:hover {
+    border-color: #0369a1;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px -14px rgba(3, 105, 161, 0.8);
+}
+
+.dialog_solicitude {
+    width: min(760px, calc(100vw - 2rem));
+    border: 0;
+    border-radius: 1rem;
+    padding: 0;
+    background: transparent;
+}
+
+.dialog_solicitude::backdrop {
+    background: rgba(15, 23, 42, 0.45);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
+.tarxeta_solicitude {
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 30px 60px -30px rgba(15, 23, 42, 0.6);
+}
+
+.tarxeta_solicitude_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.tarxeta_solicitude_header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.boton_peche_dialog {
+    border: 0;
+    background: #0f172a;
+    color: #f8fafc;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.tarxeta_solicitude_grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem 1rem;
+}
+
+.tarxeta_solicitude_grid p {
+    margin: 0;
+    padding: 0.5rem 0.6rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.6rem;
+    font-size: 0.92rem;
+}
+
 .boton_crearsolicitude {
     display: inline-flex;
     align-items: center;
@@ -246,5 +352,9 @@ body {
     .fila_solicitante {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .tarxeta_solicitude_grid {
+        grid-template-columns: 1fr;
     }
 }

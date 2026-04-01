@@ -16,10 +16,10 @@
         <div class="container-xl">
             <div class="row align-items-center g-3">
                 <div class="col-12 col-md-1 text-center text-md-start">
-                    <img class="header_logo_imagen" src="{{ asset('xunta_icon.jpg') }}" alt="Icono Xunta" />
+                    <img class="header_logo_imagen" src="{{ asset('img/icons/xunta_icon.jpg') }}" alt="Icono Xunta" />
                 </div>
                 <div class="col-12 col-md-2 text-center">
-                    <img class="header_logo_imagen" src="{{ asset('inega_icon.png') }}" alt="Icono Inega" />
+                    <img class="header_logo_imagen" src="{{ asset('img/icons/inega_icon.png') }}" alt="Icono Inega" />
                 </div>
                 <div class="col-12 col-md-9">
                     @include('layouts._partials.menu_header')
