@@ -10,7 +10,7 @@ class EntidadeController extends Controller
 {
     public function index(): View
     {
-        $entidades = Entidade::all();
+        $entidades = Entidade::paginate(15);
         return view("layouts._partials.entidades", compact("entidades"));
     }
 

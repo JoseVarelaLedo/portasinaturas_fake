@@ -26,7 +26,16 @@ class SolicitanteFactory extends Factory
     {
         return [
             'nome' => fake()->name(),
-            'nif_cif' => fake()->boolean(75) ? $this->generateValidNif() : $this->generateValidCif(),
+            'email'         => fake()->email(),
+            'telefono' => fake()->numerify(
+                fake()->randomElement(['6########', '7########', '9########'])
+            ),
+            'direccion'     => fake()->streetAddress(),
+            'cidade'        => fake()->city(),
+            'provincia'     => fake()->state(),
+            'codigo_postal' => fake()->numerify('#####'),
+            'pais'          => fake()->country(),
+            'nif_cif'       => fake()->boolean(75) ? $this->generateValidNif() : $this->generateValidCif(),
         ];
     }
 

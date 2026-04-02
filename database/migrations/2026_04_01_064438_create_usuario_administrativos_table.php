@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('usuario_administrativos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome')->required();
+            $table->string('nome');
             $table->timestamps();
         });
     }

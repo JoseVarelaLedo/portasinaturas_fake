@@ -12,5 +12,6 @@
                 @endforelse
             </ul>
         </div>
+        {{ $entidades->links() }}
     </section>
 @endsection

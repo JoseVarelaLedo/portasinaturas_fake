@@ -10,7 +10,7 @@ class SolicitanteController extends Controller
 {
     public function index(): View
     {
-        $solicitantes = Solicitante::all();
+        $solicitantes = Solicitante::paginate(15);
         return view ("layouts._partials.solicitante", compact("solicitantes"));
     }
     public function create(): View

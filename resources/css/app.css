@@ -206,6 +206,43 @@ body {
     justify-content: flex-start;
 }
 
+.fila_superior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.fila_elemento_datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+.desplegable_solicitante {
+    width: 100%;
+}
+
+.resumen_solicitante {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    list-style: none;
+    width: 100%;
+    font-weight: 600;
+}
+
+.resumen_solicitante::-webkit-details-marker {
+    display: none;
+}
+
+.desplegable_solicitante[open] .resumen_solicitante {
+    margin-bottom: 0.5rem;
+}
+
+.desplegable_solicitante .fila_elemento_datos {
+    padding-top: 0.4rem;
+}
+
 .boton_detalle_solicitude {
     width: 100%;
     display: flex;

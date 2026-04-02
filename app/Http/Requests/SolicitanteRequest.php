@@ -15,6 +15,9 @@ class SolicitanteRequest extends FormRequest
     {
         return [
             'nome' => 'required|string|max:100|min:5',
+            'email'=> 'required|email:rfc,dns',
+            'direccion' => 'string|max:200',
+            'telefono'=> 'string|max:9',
             'nif_cif' => [
                 'required',
                 'string',
