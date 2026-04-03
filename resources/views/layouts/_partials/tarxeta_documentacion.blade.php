@@ -1,37 +1,3 @@
-@php
-    $documentacionTecnica = $solicitude->documentacionTecnica;
-    $documentacionAdministrativa = $solicitude->documentacionAdministrativa;
-
-    $camposTecnicos = [
-        'Memoria técnica' => $documentacionTecnica?->estado_memoria_tecnica,
-        'Presupuesto' => $documentacionTecnica?->estado_presupuesto,
-        'Ofertas de provedores' => $documentacionTecnica?->estado_ofertas_proveedores,
-        'Planos' => $documentacionTecnica?->estado_planos,
-        'Estudo enerxético' => $documentacionTecnica?->estado_estudio_energetico,
-        'Fichas técnicas' => $documentacionTecnica?->estado_fichas_tecnicas,
-        'Licenzas' => $documentacionTecnica?->estado_licencias,
-        'Cronograma' => $documentacionTecnica?->estado_cronograma,
-    ];
-
-    $camposAdministrativos = [
-        'Formulario de solicitude' => $documentacionAdministrativa?->estado_formulario_solicitud,
-        'Documento identificativo' => $documentacionAdministrativa?->estado_documento_identificativo,
-        'Acreditación de representación' => $documentacionAdministrativa?->estado_acreditacion_representacion,
-        'Certificado AEAT' => $documentacionAdministrativa?->estado_certificado_aeat,
-        'Certificado Seguridade Social' => $documentacionAdministrativa?->estado_certificado_seguridad_social,
-        'Declaración responsable' => $documentacionAdministrativa?->estado_declaracion_responsable,
-        'Datos bancarios' => $documentacionAdministrativa?->estado_datos_bancarios,
-        'Escritura de constitución' => $documentacionAdministrativa?->estado_escritura_constitucion,
-    ];
-
-    $formatEstado = static fn (?string $estado): string => $estado
-        ? ucfirst(str_replace('_', ' ', $estado))
-        : 'Sen rexistro';
-
-    $requiereEmenda = collect(array_merge(array_values($camposTecnicos), array_values($camposAdministrativos)))
-        ->contains(static fn ($estado): bool => is_string($estado) && strtolower(trim($estado)) === 'emendar');
-@endphp
-
 <dialog class="dialog_solicitude dialog_documentacion" id="detalle-documentacion-{{ $solicitude->id }}">
     <article class="tarxeta_solicitude tarxeta_documentacion">
         <header class="tarxeta_solicitude_header tarxeta_documentacion_header">
@@ -41,10 +7,14 @@
             </div>
 
             <div class="acciones_dialog">
-                @if ($requiereEmenda)
-                    <a class="boton_emendar" href="{{ route('emenda.crear', ['solicitude_id' => $solicitude->id]) }}">
-                        EMENDAR
-                    </a>
+                @if ($documentacionVm['requiereEmenda'])
+                    <form class="form_xerar_emenda" method="POST" action="{{ route('emenda.store') }}"
+                        data-has-admin="{{ $solicitude->id_usuario_admin ? '1' : '0' }}"
+                        data-has-tecnico="{{ $solicitude->id_usuario_tecnico ? '1' : '0' }}">
+                        @csrf
+                        <input type="hidden" name="id_solicitude" value="{{ $solicitude->id }}">
+                        <button class="boton_emendar" type="submit">XERAR EMENDA</button>
+                    </form>
                 @endif
                 <button class="boton_secundario_dialog" type="button"
                     data-switch-dialog="detalle-solicitude-{{ $solicitude->id }}">
@@ -69,25 +39,57 @@
             </div>
 
             <section class="tab_panel_documentacion" id="tab-tecnica-{{ $solicitude->id }}" role="tabpanel">
-                <div class="tarxeta_solicitude_grid tarxeta_documentacion_grid">
-                    @foreach ($camposTecnicos as $etiqueta => $estado)
-                        <p>
-                            <strong>{{ $etiqueta }}:</strong>
-                            <span>{{ $formatEstado($estado) }}</span>
-                        </p>
-                    @endforeach
-                </div>
+                <form method="POST" action="{{ route('solicitude.documentacion.update', ['solicitude' => $solicitude->id]) }}">
+                    @csrf
+
+                    <div class="tarxeta_solicitude_grid tarxeta_documentacion_grid">
+                        @foreach ($documentacionVm['camposTecnicos'] as $campo)
+                            <div class="campo_formulario">
+                                <label for="{{ $campo['campo'] }}-{{ $solicitude->id }}">{{ $campo['etiqueta'] }}</label>
+                                <select id="{{ $campo['campo'] }}-{{ $solicitude->id }}" name="{{ $campo['campo'] }}">
+                                    <option value="">Sen rexistro</option>
+                                    @foreach ($estadosDocumento as $estadoDocumento)
+                                        <option value="{{ $estadoDocumento['value'] }}"
+                                            @selected($campo['estado'] === $estadoDocumento['value'])>
+                                            {{ $estadoDocumento['label'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="tarxeta_solicitude_footer">
+                        <button class="boton_formulario" type="submit">Gardar técnica</button>
+                    </div>
+                </form>
             </section>
 
             <section class="tab_panel_documentacion" id="tab-administrativa-{{ $solicitude->id }}" role="tabpanel" hidden>
-                <div class="tarxeta_solicitude_grid tarxeta_documentacion_grid">
-                    @foreach ($camposAdministrativos as $etiqueta => $estado)
-                        <p>
-                            <strong>{{ $etiqueta }}:</strong>
-                            <span>{{ $formatEstado($estado) }}</span>
-                        </p>
-                    @endforeach
-                </div>
+                <form method="POST" action="{{ route('solicitude.documentacion.update', ['solicitude' => $solicitude->id]) }}">
+                    @csrf
+
+                    <div class="tarxeta_solicitude_grid tarxeta_documentacion_grid">
+                        @foreach ($documentacionVm['camposAdministrativos'] as $campo)
+                            <div class="campo_formulario">
+                                <label for="{{ $campo['campo'] }}-{{ $solicitude->id }}">{{ $campo['etiqueta'] }}</label>
+                                <select id="{{ $campo['campo'] }}-{{ $solicitude->id }}" name="{{ $campo['campo'] }}">
+                                    <option value="">Sen rexistro</option>
+                                    @foreach ($estadosDocumento as $estadoDocumento)
+                                        <option value="{{ $estadoDocumento['value'] }}"
+                                            @selected($campo['estado'] === $estadoDocumento['value'])>
+                                            {{ $estadoDocumento['label'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="tarxeta_solicitude_footer">
+                        <button class="boton_formulario" type="submit">Gardar administrativa</button>
+                    </div>
+                </form>
             </section>
         </section>
     </article>

@@ -14,7 +14,7 @@ return [
     */
 
     'previous' => '&laquo; Anterior',
-    'next' => 'Siguiente &raquo;',
+    'next' => 'Seguinte &raquo;',
 
     'showing' => 'Amosando :from a :to do :total de resultados',
 

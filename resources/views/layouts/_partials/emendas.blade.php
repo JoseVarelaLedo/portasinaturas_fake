@@ -3,14 +3,60 @@
 @section('list')
     <section class="contedor_decorado contedor_listado">
         <div class="contedor_contido_decorado">
-            <a class="enlace_decorado" href=" {{ route('emenda.crear') }}">Crear emenda</a>
-            <ul>
+            @if (session('success'))
+                <div class="campo_formulario" style="color:#166534;">
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="campo_formulario" style="color:#b91c1c;">
+                    @foreach ($errors->all() as $error)
+                        <span>{{ $error }}</span>
+                    @endforeach
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('remesa.store') }}" id="form-remesa">
+                @csrf
+
+                <button class="boton_formulario" type="submit" id="boton-xerar-remesa" hidden disabled>
+                    Xerar Remesa
+                </button>
+
+                <ul class="lista_elementos">
                 @forelse ($emendas as $emenda)
-                    <li> #{{ $emenda->id_solicitude }}, Solicitante {{ $emenda->id_solicitante }}</li>
+                    <li class="fila_elemento {{ $emenda->remesaActual ? 'fila_elemento_remitida' : '' }}">
+                        <label style="display:flex; align-items:center; gap:.65rem; width:100%;">
+                            @if ($emenda->remesaActual)
+                                <a class="boton_secundario_dialog" href="{{ route('remesa.listado') }}#{{ $emenda->remesaActual->anchorGrupo() }}"
+                                    style="white-space:nowrap; text-decoration:none;">
+                                    En {{ $emenda->remesaActual->codigoGrupo() }}
+                                </a>
+                            @else
+                                <input type="checkbox" name="emenda_ids[]" value="{{ $emenda->id }}" class="check-emenda">
+                            @endif
+
+                            <a href="{{ route('solicitude.tarxeta', ['solicitude' => $emenda->id_solicitude]) }}"
+                                style="text-decoration:none; color:inherit; width:100%;">
+                                <strong>Emenda #{{ $emenda->id }}</strong>
+                                @if ($emenda->remesaActual)
+                                    <span class="etiqueta_remitida">REMITIDA</span>
+                                @endif
+                                | Solicitude #{{ $emenda->id_solicitude }}
+                                | Solicitante: {{ $emenda->solicitude?->solicitante?->nome ?? $emenda->id_solicitante }}
+                                | Admin: {{ $emenda->solicitude?->usuarioAdministrativo?->nome ?? 'Sen asignar' }}
+                                | Tecnico: {{ $emenda->solicitude?->usuarioTecnico?->nome ?? 'Sen asignar' }}
+                            </a>
+                        </label>
+                    </li>
                 @empty
                     <p><em>Sen datos</em></p>
                 @endforelse
-            </ul>
+                </ul>
+            </form>
         </div>
     </section>
+
+    <script src="{{ asset('js/remesa_actions.js') }}"></script>
 @endsection

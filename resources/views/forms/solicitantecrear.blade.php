@@ -51,8 +51,14 @@
 
             <div class="campo_formulario">
                 <label for="provincia">Provincia</label>
-                <input id="provincia" name="provincia" type="text" value="{{ old('provincia') }}"
-                    placeholder="Provincia" />
+                <select id="provincia" name="provincia">
+                    <option value="">Selecciona unha provincia</option>
+                    @foreach ($provinciasGalicia as $provincia)
+                        <option value="{{ $provincia }}" @selected(old('provincia') === $provincia)>
+                            {{ $provincia }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="campo_formulario">

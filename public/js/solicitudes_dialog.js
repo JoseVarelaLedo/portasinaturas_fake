@@ -26,6 +26,23 @@ const activateTab = (tabButton) => {
     });
 };
 
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(globalThis.location.search);
+    const openDialogId = params.get('open_dialog');
+
+    if (!openDialogId) {
+        return;
+    }
+
+    openDialogById(openDialogId);
+
+    params.delete('open_dialog');
+    const nextQuery = params.toString();
+    const querySegment = nextQuery ? '?' + nextQuery : '';
+    const nextUrl = globalThis.location.pathname + querySegment + globalThis.location.hash;
+    globalThis.history.replaceState(null, '', nextUrl);
+});
+
 document.addEventListener('click', (event) => {
     const switchBtn = event.target.closest('[data-switch-dialog]');
     if (switchBtn) {

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\ProvinciaGalicia;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SolicitanteRequest extends FormRequest
 {
@@ -19,7 +21,7 @@ class SolicitanteRequest extends FormRequest
             'telefono' => 'required|string|max:15|min:9',
             'direccion' => 'required|string|max:200',
             'cidade' => 'required|string|max:100',
-            'provincia' => 'required|string|max:100',
+            'provincia' => ['required', Rule::in(ProvinciaGalicia::values())],
             'codigo_postal' => 'required|string|size:5',
             'pais' => 'required|string|max:100',
             'nif_cif' => [
@@ -48,6 +50,7 @@ class SolicitanteRequest extends FormRequest
             'direccion.required' => 'A direccion é obrigatoria.',
             'cidade.required' => 'A cidade é obrigatoria.',
             'provincia.required' => 'A provincia é obrigatoria.',
+            'provincia.in' => 'A provincia debe ser unha das de Galicia.',
             'codigo_postal.required' => 'O codigo postal é obrigatorio.',
             'codigo_postal.size' => 'O codigo postal debe ter 5 caracteres.',
             'pais.required' => 'O pais é obrigatorio.',

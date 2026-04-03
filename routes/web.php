@@ -12,6 +12,8 @@ use App\Http\Controllers\RemesaController;
 
 Route::view('/','layouts.principal')->name('index');
 
+//TODO: Agrupar rutas con Middleware
+
 Route::get('/solicitante/crear', [SolicitanteController::class, 'create'])->name('solicitante.crear');
 Route::get('/solicitante/listado', [SolicitanteController::class, 'index'])->name('solicitante.listado');
 Route::post('/solicitante/store', [SolicitanteController::class, 'store'])->name('solicitante.store');
@@ -25,10 +27,13 @@ Route::get('/usuario_tecnico/listado', [UsuarioTecnicoController::class,'index']
 Route::get('/solicitude/crear',[SolicitudeController::class,'create'])->name('solicitude.crear');
 Route::get('/solicitude/listado', [SolicitudeController::class,'index'])->name('solicitude.listado');
 Route::post('/solicitude/store', [SolicitudeController::class, 'store'])->name('solicitude.store');
+Route::post('/solicitude/{solicitude}/usuarios', [SolicitudeController::class, 'updateUsuarios'])->name('solicitude.usuarios.update');
+Route::post('/solicitude/{solicitude}/documentacion', [SolicitudeController::class, 'updateDocumentacion'])->name('solicitude.documentacion.update');
+Route::get('/solicitude/tarxeta/{solicitude}', [SolicitudeController::class, 'tarxeta'])->name('solicitude.tarxeta');
 Route::get('/emenda/listado', [EmendaController::class,'index'])->name('emenda.listado');
-Route::get('/emenda/crear', [EmendaController::class,'create'])->name('emenda.crear');
+Route::post('/emenda/store', [EmendaController::class,'store'])->name('emenda.store');
 Route::get('/remesa/listado', [RemesaController::class, 'index'])->name('remesa.listado');
-Route::get('/remesa/crear', [RemesaController::class, 'create'])->name('remesa.crear');
+Route::post('/remesa/store', [RemesaController::class, 'store'])->name('remesa.store');
 
 
 

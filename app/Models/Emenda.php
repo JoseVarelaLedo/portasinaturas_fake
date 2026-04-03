@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Emenda extends Model
@@ -20,5 +21,10 @@ class Emenda extends Model
     public function remesas():HasMany
     {
         return $this->hasMany(Remesa::class, 'id_emenda');
+    }
+
+    public function remesaActual(): HasOne
+    {
+        return $this->hasOne(Remesa::class, 'id_emenda')->latestOfMany();
     }
 }

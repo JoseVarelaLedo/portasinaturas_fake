@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ProvinciaGalicia;
 use App\Http\Requests\SolicitanteRequest;
 use Illuminate\View\View;
 use App\Models\Solicitante;
@@ -15,7 +16,9 @@ class SolicitanteController extends Controller
     }
     public function create(): View
     {
-        return view('forms.solicitantecrear');
+        $provinciasGalicia = ProvinciaGalicia::values();
+
+        return view('forms.solicitantecrear', compact('provinciasGalicia'));
     }
 
     public function store(SolicitanteRequest $request)
