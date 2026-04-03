@@ -265,7 +265,36 @@ body {
     box-shadow: 0 10px 18px -14px rgba(3, 105, 161, 0.8);
 }
 
+.boton_detalle_solicitude_emendable {
+    border-color: #f5c2c7;
+    background: #fff1f2;
+}
+
+.boton_detalle_solicitude_emendable:hover {
+    border-color: #f87171;
+    box-shadow: 0 10px 18px -14px rgba(220, 38, 38, 0.55);
+}
+
+.etiqueta_emendable {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid #ef4444;
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
 .dialog_solicitude {
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
     width: min(760px, calc(100vw - 2rem));
     border: 0;
     border-radius: 1rem;
@@ -325,6 +354,115 @@ body {
     border: 1px solid #e2e8f0;
     border-radius: 0.6rem;
     font-size: 0.92rem;
+}
+
+.tarxeta_solicitude_footer {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.boton_secundario_dialog {
+    border: 1px solid #0369a1;
+    background: #f0f9ff;
+    color: #0c4a6e;
+    border-radius: 999px;
+    padding: 0.55rem 0.95rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.boton_secundario_dialog:hover {
+    background: #e0f2fe;
+    transform: translateY(-1px);
+    box-shadow: 0 14px 24px -18px rgba(12, 74, 110, 0.85);
+}
+
+.tarxeta_documentacion {
+    min-height: 26rem;
+}
+
+.tarxeta_documentacion_header {
+    align-items: flex-start;
+}
+
+.tarxeta_documentacion_header p {
+    margin: 0.35rem 0 0;
+    color: #475569;
+    font-size: 0.92rem;
+}
+
+.acciones_dialog {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.boton_emendar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: 1px solid #dc2626;
+    background: #fef2f2;
+    color: #991b1b;
+    border-radius: 999px;
+    padding: 0.55rem 0.95rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.boton_emendar:hover {
+    background: #fee2e2;
+    transform: translateY(-1px);
+    box-shadow: 0 14px 24px -18px rgba(153, 27, 27, 0.95);
+}
+
+.tabs_documentacion {
+    margin-top: 1rem;
+}
+
+.tabs_documentacion_header {
+    display: inline-flex;
+    gap: 0.45rem;
+    padding: 0.3rem;
+    background: #e2e8f0;
+    border-radius: 999px;
+}
+
+.tab_documentacion {
+    border: 0;
+    background: transparent;
+    color: #334155;
+    border-radius: 999px;
+    padding: 0.55rem 0.95rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.tab_documentacion.is-active {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 12px 24px -20px rgba(15, 23, 42, 0.9);
+}
+
+.tab_panel_documentacion {
+    margin-top: 1rem;
+}
+
+.tab_panel_documentacion[hidden] {
+    display: none;
+}
+
+.tarxeta_documentacion_grid p {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
 }
 
 .boton_crearsolicitude {
@@ -393,5 +531,24 @@ body {
 
     .tarxeta_solicitude_grid {
         grid-template-columns: 1fr;
+    }
+
+    .tarxeta_solicitude_header,
+    .tarxeta_documentacion_header,
+    .acciones_dialog,
+    .tarxeta_solicitude_footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .tabs_documentacion_header {
+        display: flex;
+        width: 100%;
+    }
+
+    .tab_documentacion,
+    .boton_emendar,
+    .boton_secundario_dialog {
+        width: 100%;
     }
 }

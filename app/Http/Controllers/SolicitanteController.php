@@ -21,7 +21,7 @@ class SolicitanteController extends Controller
     public function store(SolicitanteRequest $request)
     {
         $solicitante = new Solicitante();
-        $solicitante->fill($request->all());
+        $solicitante->fill($request->validated());
         $solicitante->save();
         return redirect()->route('solicitante.listado')->with('success','200');
     }

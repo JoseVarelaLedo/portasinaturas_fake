@@ -20,7 +20,7 @@ return new class extends Migration
             $table->float('contia_reservada_c8')->nullable();
             $table->float('contia_reservada_c31')->nullable();
             $table->boolean('lista_espera')->nullable();
-            $table->string('estado_doc')->nullable();
+            $table->string('estado_solicitude')->nullable();
             $table->unsignedBigInteger('id_usuario_admin')->nullable();
             $table->unsignedBigInteger('id_usuario_tecnico')->nullable();
             $table->timestamps();
@@ -29,6 +29,8 @@ return new class extends Migration
 
     public function down(): void
     {
+        Schema::dropIfExists('documentaciones_tecnicas');
+        Schema::dropIfExists('documentaciones_administrativas');
         Schema::dropIfExists('solicitudes');
     }
 };

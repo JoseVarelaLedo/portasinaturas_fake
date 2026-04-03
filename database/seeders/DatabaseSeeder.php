@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
             EntidadeSeeder::class,
             UsuarioAdministrativoSeeder::class,
             UsuarioTecnicoSeeder::class,
+            SolicitudeSeeder::class,
+            DocumentacionAdministrativaSeeder::class,
+            DocumentacionTecnicaSeeder::class,
         ]);
     }
 }

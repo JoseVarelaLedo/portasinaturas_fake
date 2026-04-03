@@ -74,11 +74,11 @@
                 </select>
             </div>
 
-            <div class="campo_formulario">
+            {{-- <div class="campo_formulario">
                 <label for="estado_doc">Estado da documentación</label>
                 <input id="estado_doc" name="estado_doc" type="text" value="{{ old('estado_doc') }}"
                     placeholder="Ex: Pendiente, Completa..." />
-            </div>
+            </div> --}}
 
             <div class="campo_formulario">
                 <label for="contia_reservada_c7">Contía reservada C7</label>

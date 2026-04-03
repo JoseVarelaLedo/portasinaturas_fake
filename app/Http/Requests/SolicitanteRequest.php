@@ -15,13 +15,18 @@ class SolicitanteRequest extends FormRequest
     {
         return [
             'nome' => 'required|string|max:100|min:5',
-            'email'=> 'required|email:rfc,dns',
-            'direccion' => 'string|max:200',
-            'telefono'=> 'string|max:9',
+            'email' => 'required|email:rfc,dns|max:150|unique:solicitantes,email',
+            'telefono' => 'required|string|max:15|min:9',
+            'direccion' => 'required|string|max:200',
+            'cidade' => 'required|string|max:100',
+            'provincia' => 'required|string|max:100',
+            'codigo_postal' => 'required|string|size:5',
+            'pais' => 'required|string|max:100',
             'nif_cif' => [
                 'required',
                 'string',
                 'size:9',
+                'unique:solicitantes,nif_cif',
                 'regex:/^[A-Z0-9]{9}$/i',
                 function (string $attribute, mixed $value, \Closure $fail): void {
                     if (!is_string($value) || !$this->isValidNifOrCif($value)) {
@@ -29,6 +34,25 @@ class SolicitanteRequest extends FormRequest
                     }
                 },
             ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nome.required' => 'O nome é obrigatorio.',
+            'email.required' => 'O email é obrigatorio.',
+            'email.email' => 'Introduce un email valido.',
+            'email.unique' => 'Xa existe un solicitante con ese email.',
+            'telefono.required' => 'O telefono é obrigatorio.',
+            'direccion.required' => 'A direccion é obrigatoria.',
+            'cidade.required' => 'A cidade é obrigatoria.',
+            'provincia.required' => 'A provincia é obrigatoria.',
+            'codigo_postal.required' => 'O codigo postal é obrigatorio.',
+            'codigo_postal.size' => 'O codigo postal debe ter 5 caracteres.',
+            'pais.required' => 'O pais é obrigatorio.',
+            'nif_cif.required' => 'O NIF/CIF é obrigatorio.',
+            'nif_cif.unique' => 'Xa existe un solicitante con ese NIF/CIF.',
         ];
     }
 

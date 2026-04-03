@@ -14,7 +14,7 @@
              <p><strong>Usuario administrativo:</strong>
                  {{ $solicitude->usuarioAdministrativo?->nome ?? 'Sen asignar' }}</p>
              <p><strong>Usuario técnico:</strong> {{ $solicitude->usuarioTecnico?->nome ?? 'Sen asignar' }}</p>
-             <p><strong>Estado documentación:</strong> {{ $solicitude->estado_doc ?? 'Sen indicar' }}</p>
+            <p><strong>Estado solicitude:</strong> {{ $solicitude->estado_solicitude ?? 'Sen indicar' }}</p>
              <p><strong>Contía C7:</strong> {{ $solicitude->contia_reservada_c7 ?? '0' }}</p>
              <p><strong>Contía C8:</strong> {{ $solicitude->contia_reservada_c8 ?? '0' }}</p>
              <p><strong>Contía C31:</strong> {{ $solicitude->contia_reservada_c31 ?? '0' }}</p>
@@ -39,5 +39,12 @@
              <p><strong>Data creación:</strong> {{ $solicitude->created_at?->format('d/m/Y H:i') ?? 'N/D' }}</p>
              <p><strong>Data actualización:</strong> {{ $solicitude->updated_at?->format('d/m/Y H:i') ?? 'N/D' }}</p>
          </div>
+
+         <footer class="tarxeta_solicitude_footer">
+             <button class="boton_secundario_dialog" type="button"
+                 data-switch-dialog="detalle-documentacion-{{ $solicitude->id }}">
+                 Ver documentación
+             </button>
+         </footer>
      </article>
  </dialog>

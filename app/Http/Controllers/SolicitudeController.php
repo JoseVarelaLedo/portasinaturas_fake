@@ -15,13 +15,14 @@ class SolicitudeController extends Controller
 {
     public function index(): View
     {
-        // $solicitudes = Solicitude::with([
-        //     'solicitante',
-        //     'entidade',
-        //     'usuarioAdministrativo',
-        //     'usuarioTecnico',
-        // ])->orderBy('id', 'desc')->get();
-        $solicitudes = Solicitude::paginate(10);
+        $solicitudes = Solicitude::with([
+            'solicitante',
+            'entidade',
+            'usuarioAdministrativo',
+            'usuarioTecnico',
+            'documentacionAdministrativa',
+            'documentacionTecnica',
+        ])->orderByDesc('id')->paginate(10);
 
         return view("layouts._partials.solicitude", compact("solicitudes"));
     }
