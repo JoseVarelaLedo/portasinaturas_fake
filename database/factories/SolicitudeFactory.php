@@ -41,14 +41,21 @@ class SolicitudeFactory extends Factory
             'contia_reservada_c31' => fake()->optional()->randomFloat(2, 0, 50000),
             'lista_espera' => fake()->boolean(25),
             'estado_solicitude' => fake()->randomElement([
-                'pendiente',
-                'en_revision',
-                'subsanacion',
-                'aprobada',
+                'presentada',
+                'en_proceso',
+                'desistida',
                 'denegada',
+                'emendar',
             ]),
             'id_usuario_admin' => fake()->boolean(70) ? UsuarioAdministrativo::factory() : null,
             'id_usuario_tecnico' => fake()->boolean(60) ? UsuarioTecnico::factory() : null,
         ];
+    }
+
+    public function aprobada(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'estado_solicitude' => 'aprobada',
+        ]);
     }
 }

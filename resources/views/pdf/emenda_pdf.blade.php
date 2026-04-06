@@ -94,11 +94,11 @@
             {{ $solicitude?->entidade?->nome ?? ($solicitude?->nome_entidade ?? 'Sen dato') }}
         </div>
         <div>
-            <span class="texto_resaltado">Código asignado polo INEGA na adhesión:</span>
+            <span class="texto_resaltado">CIF entidade colaboradora:</span>
             {{ $solicitude?->entidade?->cif ?? 'Sen dato' }}
         </div>
         <div>
-            <span class="texto_resaltado">Representante entidade colaboradora:</span>
+            <span class="texto_resaltado">Usuario administrativo asignado:</span>
             {{ $solicitude?->usuarioAdministrativo?->nome ?? 'Sen dato' }}
         </div>
         <div>
@@ -113,7 +113,7 @@
         #{{ $solicitude?->id ?? 'Sen dato' }}<br />
         <span class="texto_resaltado">Código Emenda:</span>
         #{{ $emenda?->id ?? 'Sen dato' }}<br />
-        <span class="texto_resaltado">Actuación:</span>
+        <span class="texto_resaltado">Estado solicitude:</span>
         {{ $solicitude?->estado_solicitude ?? 'Sen indicar' }}<br />
     </div>
     <h2 class="texto_resaltado">Requerimento de Emenda da solicitude</h2>

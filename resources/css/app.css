@@ -325,7 +325,57 @@ body {
     box-shadow: 0 10px 18px -14px rgba(220, 38, 38, 0.55);
 }
 
+.boton_detalle_solicitude_aprobada {
+    border-color: #86efac;
+    background: #f0fdf4;
+}
+
+.boton_detalle_solicitude_aprobada:hover {
+    border-color: #4ade80;
+    box-shadow: 0 10px 18px -14px rgba(34, 197, 94, 0.55);
+}
+
+.boton_detalle_solicitude_denegada_desistida {
+    border-color: #c8b5e0;
+    background: #f3e8ff;
+}
+
+.boton_detalle_solicitude_denegada_desistida:hover {
+    border-color: #a78bda;
+    box-shadow: 0 10px 18px -14px rgba(147, 51, 234, 0.55);
+}
+
 .etiqueta_emendable {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid #ef4444;
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.etiqueta_aprobada {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid #4ade80;
+    background: #dcfce7;
+    color: #166534;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.etiqueta_denegada_desistida {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -462,6 +512,31 @@ body {
     margin-top: 1rem;
     display: flex;
     justify-content: flex-end;
+}
+
+.tarxeta_documentacion_footer_aprobar {
+    justify-content: flex-start;
+    border-top: 1px solid #bbf7d0;
+    padding-top: 0.75rem;
+}
+
+.boton_aprobar_solicitude {
+    border: 1px solid #4ade80;
+    background: #f0fdf4;
+    color: #166534;
+    border-radius: 999px;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.boton_aprobar_solicitude:hover {
+    background: #dcfce7;
+    border-color: #22c55e;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px -10px rgba(34, 197, 94, 0.6);
 }
 
 .boton_secundario_dialog {

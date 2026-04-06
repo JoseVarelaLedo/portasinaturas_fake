@@ -20,14 +20,32 @@
                     @endphp
 
                     <li class="fila_elemento fila_elemento_solicitude">
-                        <button class="boton_detalle_solicitude {{ $documentacionVm['requiereEmenda'] ? 'boton_detalle_solicitude_emendable' : '' }}" type="button"
+                        @php
+                            $clasesBoton = 'boton_detalle_solicitude';
+                            if ($solicitude->estado_solicitude?->isNoEmendable()) {
+                                if ($solicitude->estado_solicitude->value === 'aprobada') {
+                                    $clasesBoton .= ' boton_detalle_solicitude_aprobada';
+                                } else {
+                                    $clasesBoton .= ' boton_detalle_solicitude_denegada_desistida';
+                                }
+                            } elseif ($documentacionVm['requiereEmenda']) {
+                                $clasesBoton .= ' boton_detalle_solicitude_emendable';
+                            }
+                        @endphp
+                        <button class="{{ $clasesBoton }}" type="button"
                             data-dialog-id="detalle-solicitude-{{ $solicitude->id }}">
                             <span>#{{ $solicitude->id }}</span>
                             <span>Solicitante: </span>
                             <span style="font-weight: normal"><em>{{ $solicitude->solicitante?->nome }}</em></span>
                             <span>CIF|NIF: </span>
                             <span style="font-weight: normal"><em>{{ $solicitude->solicitante?->nif_cif }}</em></span>
-                            @if ($documentacionVm['requiereEmenda'])
+                            @if ($solicitude->estado_solicitude?->isNoEmendable())
+                                @if ($solicitude->estado_solicitude->value === 'aprobada')
+                                    <span class="etiqueta_aprobada">{{ $solicitude->estado_solicitude->label() }}</span>
+                                @else
+                                    <span class="etiqueta_denegada_desistida">{{ $solicitude->estado_solicitude->label() }}</span>
+                                @endif
+                            @elseif ($documentacionVm['requiereEmenda'])
                                 <span class="etiqueta_emendable">EMENDAR</span>
                             @endif
                         </button>

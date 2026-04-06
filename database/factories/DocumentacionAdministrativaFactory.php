@@ -40,4 +40,26 @@ class DocumentacionAdministrativaFactory extends Factory
             'estado_escritura_constitucion' => $estado(),
         ];
     }
+
+    public function aprobada(): static
+    {
+        $estadosPermitidos = [
+            EstadoDocumento::APORTADO,
+            EstadoDocumento::VALIDADO,
+            EstadoDocumento::NON_PROCEDE,
+            EstadoDocumento::EMENDADO,
+        ];
+        $estado = fn () => fake()->randomElement($estadosPermitidos)->value;
+
+        return $this->state(fn (array $attributes) => [
+            'estado_formulario_solicitud' => $estado(),
+            'estado_documento_identificativo' => $estado(),
+            'estado_acreditacion_representacion' => $estado(),
+            'estado_certificado_aeat' => $estado(),
+            'estado_certificado_seguridad_social' => $estado(),
+            'estado_declaracion_responsable' => $estado(),
+            'estado_datos_bancarios' => $estado(),
+            'estado_escritura_constitucion' => $estado(),
+        ]);
+    }
 }

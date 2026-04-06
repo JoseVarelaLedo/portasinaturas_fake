@@ -15,9 +15,15 @@ class DocumentacionTecnicaSeeder extends Seeder
     {
         Solicitude::query()
             ->doesntHave('documentacionTecnica')
-            ->get(['id'])
+            ->get(['id', 'estado_solicitude'])
             ->each(function (Solicitude $solicitude): void {
-                DocumentacionTecnica::factory()->create([
+                $factory = DocumentacionTecnica::factory();
+
+                if ($solicitude->estado_solicitude?->value === 'aprobada') {
+                    $factory = $factory->aprobada();
+                }
+
+                $factory->create([
                     'solicitude_id' => $solicitude->id,
                 ]);
             });

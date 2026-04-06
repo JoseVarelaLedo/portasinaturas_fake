@@ -108,5 +108,18 @@
                 </form>
             </section>
         </section>
+
+        @if (!$solicitude->estado_solicitude?->isNoEmendable())
+            <footer class="tarxeta_solicitude_footer tarxeta_documentacion_footer_aprobar">
+                <form method="POST" action="{{ route('solicitude.estado.update', ['solicitude' => $solicitude->id]) }}">
+                    @csrf
+                    <input type="hidden" name="estado_solicitude" value="aprobada">
+                    <button class="boton_aprobar_solicitude" type="submit"
+                        onclick="return confirm('¿Seguro que queres aprobar esta solicitude?')">
+                        Aprobar solicitude
+                    </button>
+                </form>
+            </footer>
+        @endif
     </article>
 </dialog>

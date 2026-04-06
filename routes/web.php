@@ -29,6 +29,7 @@ Route::get('/solicitude/crear',[SolicitudeController::class,'create'])->name('so
 Route::get('/solicitude/listado', [SolicitudeController::class,'index'])->name('solicitude.listado');
 Route::post('/solicitude/store', [SolicitudeController::class, 'store'])->name('solicitude.store');
 Route::post('/solicitude/{solicitude}/usuarios', [SolicitudeController::class, 'updateUsuarios'])->name('solicitude.usuarios.update');
+Route::post('/solicitude/{solicitude}/estado', [SolicitudeController::class, 'updateEstado'])->name('solicitude.estado.update');
 Route::post('/solicitude/{solicitude}/documentacion', [SolicitudeController::class, 'updateDocumentacion'])->name('solicitude.documentacion.update');
 Route::get('/solicitude/tarxeta/{solicitude}', [SolicitudeController::class, 'tarxeta'])->name('solicitude.tarxeta');
 Route::get('/emenda/listado', [EmendaController::class,'index'])->name('emenda.listado');
