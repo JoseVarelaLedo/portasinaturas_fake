@@ -15,6 +15,7 @@ use App\Models\Solicitude;
 use App\Models\UsuarioAdministrativo;
 use App\Models\UsuarioTecnico;
 use App\Services\SolicitudeDocumentacionService;
+use Illuminate\Validation\ValidationException;
 
 class SolicitudeController extends Controller
 {
@@ -113,7 +114,62 @@ class SolicitudeController extends Controller
             ->map(fn (EstadoDocumento $estado) => $estado->value)
             ->all();
 
-        $camposTecnicos = [
+        $camposTecnicos = $this->camposTecnicosDocumentacion();
+        $camposAdministrativos = $this->camposAdministrativosDocumentacion();
+
+        $rules = $this->buildDocumentacionRules(
+            array_merge($camposTecnicos, $camposAdministrativos),
+            $valoresEstados
+        );
+
+        $validated = $request->validate($rules);
+
+        $motivosEmenda = $validated['motivos_emenda'] ?? [];
+
+        $this->validateMotivosEmenda(
+            $validated,
+            $motivosEmenda,
+            array_merge($camposTecnicos, $camposAdministrativos)
+        );
+
+        $datosTecnicos = array_intersect_key($validated, array_flip($camposTecnicos));
+        $datosAdministrativos = array_intersect_key($validated, array_flip($camposAdministrativos));
+
+        if ($datosTecnicos !== []) {
+            $documentacionTecnica = DocumentacionTecnica::query()->firstOrNew([
+                'solicitude_id' => $solicitude->id,
+            ]);
+
+            $motivosTecnicos = $this->buildMotivosEmendaForCampos($datosTecnicos, $motivosEmenda, $camposTecnicos);
+
+            $documentacionTecnica->fill($datosTecnicos);
+            $documentacionTecnica->motivos_emenda = $motivosTecnicos;
+            $documentacionTecnica->solicitude_id = $solicitude->id;
+            $documentacionTecnica->save();
+        }
+
+        if ($datosAdministrativos !== []) {
+            $documentacionAdministrativa = DocumentacionAdministrativa::query()->firstOrNew([
+                'solicitude_id' => $solicitude->id,
+            ]);
+
+            $motivosAdministrativos = $this->buildMotivosEmendaForCampos($datosAdministrativos, $motivosEmenda, $camposAdministrativos);
+
+            $documentacionAdministrativa->fill($datosAdministrativos);
+            $documentacionAdministrativa->motivos_emenda = $motivosAdministrativos;
+            $documentacionAdministrativa->solicitude_id = $solicitude->id;
+            $documentacionAdministrativa->save();
+        }
+
+        return redirect()->route('solicitude.listado')->with('success', 'Documentacion actualizada correctamente.');
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function camposTecnicosDocumentacion(): array
+    {
+        return [
             'estado_memoria_tecnica',
             'estado_presupuesto',
             'estado_ofertas_proveedores',
@@ -123,8 +179,14 @@ class SolicitudeController extends Controller
             'estado_licencias',
             'estado_cronograma',
         ];
+    }
 
-        $camposAdministrativos = [
+    /**
+     * @return array<int, string>
+     */
+    private function camposAdministrativosDocumentacion(): array
+    {
+        return [
             'estado_formulario_solicitud',
             'estado_documento_identificativo',
             'estado_acreditacion_representacion',
@@ -134,36 +196,73 @@ class SolicitudeController extends Controller
             'estado_datos_bancarios',
             'estado_escritura_constitucion',
         ];
+    }
 
+    /**
+     * @param  array<int, string>  $camposDocumentacion
+     * @param  array<int, string>  $valoresEstados
+     * @return array<string, mixed>
+     */
+    private function buildDocumentacionRules(array $camposDocumentacion, array $valoresEstados): array
+    {
         $rules = [];
 
-        foreach (array_merge($camposTecnicos, $camposAdministrativos) as $campo) {
+        foreach ($camposDocumentacion as $campo) {
             $rules[$campo] = ['nullable', 'in:' . implode(',', $valoresEstados)];
         }
 
-        $validated = $request->validate($rules);
+        $rules['motivos_emenda'] = ['nullable', 'array'];
+        $rules['motivos_emenda.*'] = ['nullable', 'string', 'max:2000'];
 
-        $datosTecnicos = array_intersect_key($validated, array_flip($camposTecnicos));
-        $datosAdministrativos = array_intersect_key($validated, array_flip($camposAdministrativos));
+        return $rules;
+    }
 
-        if ($datosTecnicos !== []) {
-            $documentacionTecnica = DocumentacionTecnica::query()->firstOrNew([
-                'solicitude_id' => $solicitude->id,
-            ]);
-            $documentacionTecnica->fill($datosTecnicos);
-            $documentacionTecnica->solicitude_id = $solicitude->id;
-            $documentacionTecnica->save();
+    /**
+     * @param  array<string, mixed>  $validated
+     * @param  array<string, mixed>  $motivosEmenda
+     * @param  array<int, string>  $camposDocumentacion
+     */
+    private function validateMotivosEmenda(array $validated, array $motivosEmenda, array $camposDocumentacion): void
+    {
+        $erroresMotivos = [];
+
+        foreach ($camposDocumentacion as $campo) {
+            if (($validated[$campo] ?? null) !== EstadoDocumento::EMENDAR->value) {
+                continue;
+            }
+
+            $motivo = trim((string) ($motivosEmenda[$campo] ?? ''));
+            if ($motivo === '') {
+                $erroresMotivos['motivos_emenda.' . $campo] = 'Debes indicar o motivo da emenda para este campo.';
+            }
         }
 
-        if ($datosAdministrativos !== []) {
-            $documentacionAdministrativa = DocumentacionAdministrativa::query()->firstOrNew([
-                'solicitude_id' => $solicitude->id,
-            ]);
-            $documentacionAdministrativa->fill($datosAdministrativos);
-            $documentacionAdministrativa->solicitude_id = $solicitude->id;
-            $documentacionAdministrativa->save();
+        if ($erroresMotivos !== []) {
+            throw ValidationException::withMessages($erroresMotivos);
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $datosDocumentacion
+     * @param  array<string, mixed>  $motivosEmenda
+     * @param  array<int, string>  $camposDocumentacion
+     * @return array<string, string>
+     */
+    private function buildMotivosEmendaForCampos(array $datosDocumentacion, array $motivosEmenda, array $camposDocumentacion): array
+    {
+        $motivosPorCampo = [];
+
+        foreach ($camposDocumentacion as $campo) {
+            if (($datosDocumentacion[$campo] ?? null) !== EstadoDocumento::EMENDAR->value) {
+                continue;
+            }
+
+            $motivo = trim((string) ($motivosEmenda[$campo] ?? ''));
+            if ($motivo !== '') {
+                $motivosPorCampo[$campo] = $motivo;
+            }
         }
 
-        return redirect()->route('solicitude.listado')->with('success', 'Documentacion actualizada correctamente.');
+        return $motivosPorCampo;
     }
 }

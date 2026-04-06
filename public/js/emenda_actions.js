@@ -14,10 +14,10 @@ document.addEventListener('submit', (event) => {
 
     event.preventDefault();
 
-    let text = 'A solicitude non ten usuario tecnico asignado.';
+    let text = 'A solicitude non ten usuario técnico asignado.';
 
     if (!hasAdmin && !hasTecnico) {
-        text = 'A solicitude non ten usuario administrativo nin tecnico asignados.';
+        text = 'A solicitude non ten usuario administrativo nin técnico asignados.';
     } else if (!hasAdmin) {
         text = 'A solicitude non ten usuario administrativo asignado.';
     }

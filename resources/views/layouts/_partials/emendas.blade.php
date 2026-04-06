@@ -49,6 +49,10 @@
                                 | Tecnico: {{ $emenda->solicitude?->usuarioTecnico?->nome ?? 'Sen asignar' }}
                             </a>
                         </label>
+                        <a href="{{ route('emenda.xerarPDF', ['emenda' => $emenda->id]) }}" class="etiqueta_emendable">
+                            Descargar PDF
+                        </a>
+
                     </li>
                 @empty
                     <p><em>Sen datos</em></p>

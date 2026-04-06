@@ -46,7 +46,8 @@
                         @foreach ($documentacionVm['camposTecnicos'] as $campo)
                             <div class="campo_formulario">
                                 <label for="{{ $campo['campo'] }}-{{ $solicitude->id }}">{{ $campo['etiqueta'] }}</label>
-                                <select id="{{ $campo['campo'] }}-{{ $solicitude->id }}" name="{{ $campo['campo'] }}">
+                                <select id="{{ $campo['campo'] }}-{{ $solicitude->id }}" name="{{ $campo['campo'] }}"
+                                    data-estado-documento>
                                     <option value="">Sen rexistro</option>
                                     @foreach ($estadosDocumento as $estadoDocumento)
                                         <option value="{{ $estadoDocumento['value'] }}"
@@ -55,6 +56,13 @@
                                         </option>
                                     @endforeach
                                 </select>
+
+                                <div class="campo_formulario" data-emenda-motivo data-motivo-for="{{ $campo['campo'] }}-{{ $solicitude->id }}" hidden>
+                                    <label for="motivo-{{ $campo['campo'] }}-{{ $solicitude->id }}">Motivo da emenda</label>
+                                    <textarea id="motivo-{{ $campo['campo'] }}-{{ $solicitude->id }}"
+                                        name="motivos_emenda[{{ $campo['campo'] }}]" rows="3"
+                                    placeholder="Describe o motivo da emenda">{{ old('motivos_emenda.' . $campo['campo'], $campo['motivo'] ?? '') }}</textarea>
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -73,7 +81,8 @@
                         @foreach ($documentacionVm['camposAdministrativos'] as $campo)
                             <div class="campo_formulario">
                                 <label for="{{ $campo['campo'] }}-{{ $solicitude->id }}">{{ $campo['etiqueta'] }}</label>
-                                <select id="{{ $campo['campo'] }}-{{ $solicitude->id }}" name="{{ $campo['campo'] }}">
+                                <select id="{{ $campo['campo'] }}-{{ $solicitude->id }}" name="{{ $campo['campo'] }}"
+                                    data-estado-documento>
                                     <option value="">Sen rexistro</option>
                                     @foreach ($estadosDocumento as $estadoDocumento)
                                         <option value="{{ $estadoDocumento['value'] }}"
@@ -82,6 +91,13 @@
                                         </option>
                                     @endforeach
                                 </select>
+
+                                <div class="campo_formulario" data-emenda-motivo data-motivo-for="{{ $campo['campo'] }}-{{ $solicitude->id }}" hidden>
+                                    <label for="motivo-{{ $campo['campo'] }}-{{ $solicitude->id }}">Motivo da emenda</label>
+                                    <textarea id="motivo-{{ $campo['campo'] }}-{{ $solicitude->id }}"
+                                        name="motivos_emenda[{{ $campo['campo'] }}]" rows="3"
+                                    placeholder="Describe o motivo da emenda">{{ old('motivos_emenda.' . $campo['campo'], $campo['motivo'] ?? '') }}</textarea>
+                                </div>
                             </div>
                         @endforeach
                     </div>

@@ -26,6 +26,35 @@ const activateTab = (tabButton) => {
     });
 };
 
+const syncEmendaMotivoVisibility = (estadoSelect) => {
+    if (!(estadoSelect instanceof HTMLSelectElement) || !estadoSelect.id) {
+        return;
+    }
+
+    const form = estadoSelect.closest('form');
+
+    if (!form) {
+        return;
+    }
+
+    const motivoContainer = form.querySelector(`[data-emenda-motivo][data-motivo-for="${estadoSelect.id}"]`);
+
+    if (!motivoContainer) {
+        return;
+    }
+
+    const shouldShow = estadoSelect.value === 'emendar';
+    motivoContainer.hidden = !shouldShow;
+
+    if (!shouldShow) {
+        const motivoInput = motivoContainer.querySelector('textarea');
+
+        if (motivoInput) {
+            motivoInput.value = '';
+        }
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(globalThis.location.search);
     const openDialogId = params.get('open_dialog');
@@ -80,5 +109,13 @@ document.addEventListener('click', (event) => {
             event.clientY > rect.bottom;
 
         if (outside) dialog.close();
+    }
+});
+
+document.addEventListener('change', (event) => {
+    const estadoSelect = event.target.closest('[data-estado-documento]');
+
+    if (estadoSelect) {
+        syncEmendaMotivoVisibility(estadoSelect);
     }
 });

@@ -4,7 +4,7 @@
     <section class="contedor_decorado contedor_listado">
         <div class="contedor_contido_decorado">
             @if (session('success'))
-                <div class="campo_formulario" style="color:#166534;">
+                <div class="campo_formulario" style="color:#166534;" data-solicitude-success="{{ session('success') }}">
                     <span>{{ session('success') }}</span>
                 </div>
             @endif
@@ -53,6 +53,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/solicitudes_dialog.js') }}"></script>
     <script src="{{ asset('js/emenda_actions.js') }}"></script>
+    <script src="{{ asset('js/solicitude_form.js') }}"></script>
 
 @endsection
 

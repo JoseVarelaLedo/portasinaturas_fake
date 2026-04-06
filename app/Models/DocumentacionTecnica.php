@@ -14,6 +14,10 @@ class DocumentacionTecnica extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'motivos_emenda' => 'array',
+    ];
+
     public function solicitude(): BelongsTo
     {
         return $this->belongsTo(Solicitude::class);

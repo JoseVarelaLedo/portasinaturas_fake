@@ -8,6 +8,7 @@ use App\Http\Controllers\UsuarioAdministrativoController;
 use App\Http\Controllers\UsuarioTecnicoController;
 use App\Http\Controllers\EmendaController;
 use App\Http\Controllers\RemesaController;
+use App\Http\Controllers\PDFController;
 
 
 Route::view('/','layouts.principal')->name('index');
@@ -34,6 +35,8 @@ Route::get('/emenda/listado', [EmendaController::class,'index'])->name('emenda.l
 Route::post('/emenda/store', [EmendaController::class,'store'])->name('emenda.store');
 Route::get('/remesa/listado', [RemesaController::class, 'index'])->name('remesa.listado');
 Route::post('/remesa/store', [RemesaController::class, 'store'])->name('remesa.store');
+
+Route::get('/emenda/{emenda}/pdf', [PDFController::class, 'xerarPDF'])->name('emenda.xerarPDF');
 
 
 
