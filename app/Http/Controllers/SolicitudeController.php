@@ -20,16 +20,77 @@ use App\Services\SolicitudeDocumentacionService;
 
 class SolicitudeController extends Controller
 {
-    public function index(SolicitudeDocumentacionService $documentacionService): View
+    public function index(Request $request, SolicitudeDocumentacionService $documentacionService): View
     {
-        $solicitudes = Solicitude::with([
-            'solicitante',
-            'entidade',
-            'usuarioAdministrativo',
-            'usuarioTecnico',
-            'documentacionAdministrativa',
-            'documentacionTecnica',
-        ])->orderByDesc('id')->paginate(10);
+        $busqueda = trim((string) $request->query('search', ''));
+
+        $solicitudes = Solicitude::query()
+            ->with([
+                'solicitante',
+                'entidade',
+                'usuarioAdministrativo',
+                'usuarioTecnico',
+                'documentacionAdministrativa',
+                'documentacionTecnica',
+            ])
+            ->when($busqueda !== '', function ($query) use ($busqueda) {
+                $like = '%' . $busqueda . '%';
+
+                $query->where(function ($subQuery) use ($like, $busqueda) {
+                    $subQuery
+                        ->where('id', $busqueda)
+                        ->orWhere('nome_entidade', 'like', $like)
+                        ->orWhere('nome_solicitante', 'like', $like)
+                        ->orWhere('estado_solicitude', 'like', $like)
+                        ->orWhere('contia_reservada_c7', 'like', $like)
+                        ->orWhere('contia_reservada_c8', 'like', $like)
+                        ->orWhere('contia_reservada_c31', 'like', $like)
+                        ->orWhereHas('solicitante', function ($solicitanteQuery) use ($like) {
+                            $solicitanteQuery
+                                ->where('nome', 'like', $like)
+                                ->orWhere('nif_cif', 'like', $like)
+                                ->orWhere('email', 'like', $like)
+                                ->orWhere('cidade', 'like', $like)
+                                ->orWhere('provincia', 'like', $like);
+                        })
+                        ->orWhereHas('entidade', function ($entidadeQuery) use ($like) {
+                            $entidadeQuery
+                                ->where('nome', 'like', $like)
+                                ->orWhere('cif', 'like', $like);
+                        })
+                        ->orWhereHas('usuarioAdministrativo', function ($usuarioAdminQuery) use ($like) {
+                            $usuarioAdminQuery->where('nome', 'like', $like);
+                        })
+                        ->orWhereHas('usuarioTecnico', function ($usuarioTecnicoQuery) use ($like) {
+                            $usuarioTecnicoQuery->where('nome', 'like', $like);
+                        })
+                        ->orWhereHas('documentacionAdministrativa', function ($documentacionAdministrativaQuery) use ($like) {
+                            $documentacionAdministrativaQuery
+                                ->where('estado_formulario_solicitud', 'like', $like)
+                                ->orWhere('estado_documento_identificativo', 'like', $like)
+                                ->orWhere('estado_acreditacion_representacion', 'like', $like)
+                                ->orWhere('estado_certificado_aeat', 'like', $like)
+                                ->orWhere('estado_certificado_seguridad_social', 'like', $like)
+                                ->orWhere('estado_declaracion_responsable', 'like', $like)
+                                ->orWhere('estado_datos_bancarios', 'like', $like)
+                                ->orWhere('estado_escritura_constitucion', 'like', $like);
+                        })
+                        ->orWhereHas('documentacionTecnica', function ($documentacionTecnicaQuery) use ($like) {
+                            $documentacionTecnicaQuery
+                                ->where('estado_memoria_tecnica', 'like', $like)
+                                ->orWhere('estado_presupuesto', 'like', $like)
+                                ->orWhere('estado_ofertas_proveedores', 'like', $like)
+                                ->orWhere('estado_planos', 'like', $like)
+                                ->orWhere('estado_estudio_energetico', 'like', $like)
+                                ->orWhere('estado_fichas_tecnicas', 'like', $like)
+                                ->orWhere('estado_licencias', 'like', $like)
+                                ->orWhere('estado_cronograma', 'like', $like);
+                        });
+                });
+            })
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->withQueryString();
 
         $documentacionPorSolicitude = $documentacionService->buildForCollection($solicitudes->getCollection());
         $usuariosAdministrativos = UsuarioAdministrativo::query()->orderBy('nome')->get(['id', 'nome']);
@@ -42,7 +103,7 @@ class SolicitudeController extends Controller
             ->values()
             ->all();
 
-        return view("layouts._partials.solicitude", compact("solicitudes", "documentacionPorSolicitude", "estadosDocumento", "usuariosAdministrativos", "usuariosTecnicos"));
+        return view("layouts._partials.solicitude", compact("solicitudes", "documentacionPorSolicitude", "estadosDocumento", "usuariosAdministrativos", "usuariosTecnicos", 'busqueda'));
     }
 
     public function create(): View|RedirectResponse

@@ -4,15 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Enums\ProvinciaGalicia;
 use App\Http\Requests\SolicitanteRequest;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Solicitante;
 
 class SolicitanteController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $solicitantes = Solicitante::paginate(15);
-        return view ("layouts._partials.solicitante", compact("solicitantes"));
+        $busqueda = trim((string) $request->query('search', ''));
+
+        $solicitantes = Solicitante::query()
+            ->when($busqueda !== '', function ($query) use ($busqueda) {
+                $like = '%' . $busqueda . '%';
+
+                $query->where(function ($subQuery) use ($like) {
+                    $subQuery
+                        ->where('nome', 'like', $like)
+                        ->orWhere('nif_cif', 'like', $like)
+                        ->orWhere('email', 'like', $like)
+                        ->orWhere('direccion', 'like', $like)
+                        ->orWhere('cidade', 'like', $like)
+                        ->orWhere('provincia', 'like', $like)
+                        ->orWhere('codigo_postal', 'like', $like)
+                        ->orWhere('pais', 'like', $like);
+                });
+            })
+            ->orderBy('nome')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view("layouts._partials.solicitante", compact('solicitantes', 'busqueda'));
     }
     public function create(): View
     {

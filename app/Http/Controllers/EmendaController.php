@@ -10,16 +10,53 @@ use Illuminate\Http\RedirectResponse;
 
 class EmendaController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $emendas = Emenda::with([
-            'solicitude.solicitante',
-            'solicitude.usuarioAdministrativo',
-            'solicitude.usuarioTecnico',
-            'remesaActual',
-        ])->orderByDesc('id')->get();
+        $busqueda = trim((string) $request->query('search', ''));
 
-        return view('layouts._partials.emendas', compact('emendas'));
+        $emendas = Emenda::query()
+            ->with([
+                'solicitude.solicitante',
+                'solicitude.usuarioAdministrativo',
+                'solicitude.usuarioTecnico',
+                'remesaActual',
+            ])
+            ->when($busqueda !== '', function ($query) use ($busqueda) {
+                $like = '%' . $busqueda . '%';
+
+                $query->where(function ($subQuery) use ($like, $busqueda) {
+                    $subQuery
+                        ->where('id', $busqueda)
+                        ->orWhere('id_solicitude', 'like', $like)
+                        ->orWhere('id_solicitante', 'like', $like)
+                        ->orWhereHas('solicitude', function ($solicitudeQuery) use ($like, $busqueda) {
+                            $solicitudeQuery
+                                ->where('id', $busqueda)
+                                ->orWhere('nome_entidade', 'like', $like)
+                                ->orWhere('nome_solicitante', 'like', $like)
+                                ->orWhere('estado_solicitude', 'like', $like)
+                                ->orWhereHas('solicitante', function ($solicitanteQuery) use ($like) {
+                                    $solicitanteQuery
+                                        ->where('nome', 'like', $like)
+                                        ->orWhere('nif_cif', 'like', $like)
+                                        ->orWhere('email', 'like', $like);
+                                })
+                                ->orWhereHas('usuarioAdministrativo', function ($usuarioAdminQuery) use ($like) {
+                                    $usuarioAdminQuery->where('nome', 'like', $like);
+                                })
+                                ->orWhereHas('usuarioTecnico', function ($usuarioTecnicoQuery) use ($like) {
+                                    $usuarioTecnicoQuery->where('nome', 'like', $like);
+                                });
+                        })
+                        ->orWhereHas('remesaActual', function ($remesaQuery) use ($like) {
+                            $remesaQuery->where('remesa_grupo', 'like', $like);
+                        });
+                });
+            })
+            ->orderByDesc('id')
+            ->get();
+
+        return view('layouts._partials.emendas', compact('emendas', 'busqueda'));
     }
 
     public function store(Request $request): RedirectResponse

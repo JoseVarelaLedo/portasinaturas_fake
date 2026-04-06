@@ -12,9 +12,8 @@ class RefreshDataBase extends Command
     protected $description = 'Fai rollback a DB e executa os seeder/faker';
   
     public function handle()
-    {
-       Artisan::call('migrate:rollback');
-       Artisan::call('migrate');
+    {       
+       Artisan::call('migrate:fresh');
        Artisan::call('db:seed');
     }
 }

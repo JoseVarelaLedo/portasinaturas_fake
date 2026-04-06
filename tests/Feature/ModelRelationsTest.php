@@ -18,21 +18,19 @@ class ModelRelationsTest extends TestCase
 
     public function test_relations_support_eager_loading_with_expected_foreign_keys(): void
     {
-        $solicitante = Solicitante::create([
+        $solicitante = Solicitante::factory()->create([
             'nome' => 'Solicitante Test',
-            'nif_cif' => 'A12345678',
         ]);
 
-        $entidade = Entidade::create([
+        $entidade = Entidade::factory()->create([
             'nome' => 'Entidade Test',
-            'cif' => 'B12345678',
         ]);
 
-        $usuarioAdministrativo = UsuarioAdministrativo::create([
+        $usuarioAdministrativo = UsuarioAdministrativo::factory()->create([
             'nome' => 'Admin Test',
         ]);
 
-        $usuarioTecnico = UsuarioTecnico::create([
+        $usuarioTecnico = UsuarioTecnico::factory()->create([
             'nome' => 'Tecnico Test',
         ]);
 
