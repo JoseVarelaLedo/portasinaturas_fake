@@ -78,7 +78,7 @@
                                 | Solicitude #{{ $emenda->id_solicitude }}
                                 | Solicitante: {{ $emenda->solicitude?->solicitante?->nome ?? $emenda->id_solicitante }}
                                 | Admin: {{ $emenda->solicitude?->usuarioAdministrativo?->nome ?? 'Sen asignar' }}
-                                | Tecnico: {{ $emenda->solicitude?->usuarioTecnico?->nome ?? 'Sen asignar' }}
+                                | Técnico: {{ $emenda->solicitude?->usuarioTecnico?->nome ?? 'Sen asignar' }}
                             </a>
                         </label>
                         <a href="{{ route('emenda.xerarPDF', ['emenda' => $emenda->id]) }}" class="etiqueta_emendable">

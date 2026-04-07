@@ -30,7 +30,7 @@ class SolicitudeController extends Controller
             'nome_entidade' => 'Entidade',
             'estado_solicitude' => 'Estado',
             'admin_nome' => 'Admin',
-            'tecnico_nome' => 'Tecnico',
+            'tecnico_nome' => 'Técnico',
         ];
         $ordenPor = (string) $request->query('sort_by', 'id');
         if (!array_key_exists($ordenPor, $camposOrdenables)) {

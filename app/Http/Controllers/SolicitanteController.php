@@ -17,11 +17,11 @@ class SolicitanteController extends Controller
             'nome' => 'Nome',
             'nif_cif' => 'NIF/CIF',
             'email' => 'Email',
-            'direccion' => 'Direccion',
+            'direccion' => 'Dirección',
             'cidade' => 'Localidade',
             'provincia' => 'Provincia',
-            'codigo_postal' => 'Codigo postal',
-            'pais' => 'Pais',
+            'codigo_postal' => 'Código postal',
+            'pais' => 'País',
         ];
         $ordenPor = (string) $request->query('sort_by', 'nome');
         if (!array_key_exists($ordenPor, $camposOrdenables)) {

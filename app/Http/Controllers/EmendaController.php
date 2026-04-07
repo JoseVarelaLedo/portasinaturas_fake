@@ -19,7 +19,7 @@ class EmendaController extends Controller
             'id_solicitude' => 'ID solicitude',
             'solicitante_nome' => 'Solicitante',
             'admin_nome' => 'Admin',
-            'tecnico_nome' => 'Tecnico',
+            'tecnico_nome' => 'Técnico',
             'remesa_grupo' => 'Remesa',
         ];
         $ordenPor = (string) $request->query('sort_by', 'id');
