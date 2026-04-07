@@ -14,6 +14,7 @@
                         @csrf
                         <input type="hidden" name="id_solicitude" value="{{ $solicitude->id }}">
                         <button class="boton_emendar" type="submit">XERAR EMENDA</button>
+                        <!--TODO lóxica de chamada a servizos de NOTIFICACIÓN E PORTASINATURAS-->
                     </form>
                 @endif
                 <button class="boton_secundario_dialog" type="button"
@@ -111,11 +112,11 @@
 
         @if (!$solicitude->estado_solicitude?->isNoEmendable())
             <footer class="tarxeta_solicitude_footer tarxeta_documentacion_footer_aprobar">
-                <form method="POST" action="{{ route('solicitude.estado.update', ['solicitude' => $solicitude->id]) }}">
+                <form class="form_aprobar_solicitude" method="POST" action="{{ route('solicitude.estado.update', ['solicitude' => $solicitude->id]) }}">
                     @csrf
                     <input type="hidden" name="estado_solicitude" value="aprobada">
-                    <button class="boton_aprobar_solicitude" type="submit"
-                        onclick="return confirm('¿Seguro que queres aprobar esta solicitude?')">
+                    <input type="hidden" name="open_dialog" value="detalle-documentacion-{{ $solicitude->id }}">
+                    <button class="boton_aprobar_solicitude" type="submit">
                         Aprobar solicitude
                     </button>
                 </form>

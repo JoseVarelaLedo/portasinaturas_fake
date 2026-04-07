@@ -7,23 +7,10 @@ use App\Models\DocumentacionTecnica;
 use App\Models\Solicitude;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<DocumentacionTecnica>
- */
 class DocumentacionTecnicaFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var class-string<DocumentacionTecnica>
-     */
     protected $model = DocumentacionTecnica::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         $estado = fn () => fake()->randomElement(EstadoDocumento::cases())->value;

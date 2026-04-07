@@ -7,9 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateSolicitudeDocumentacionRequest extends FormRequest
 {
-    /**
-     * @var array<int, string>
-     */
     private const CAMPOS_TECNICOS = [
         'estado_memoria_tecnica',
         'estado_presupuesto',
@@ -21,9 +18,6 @@ class UpdateSolicitudeDocumentacionRequest extends FormRequest
         'estado_cronograma',
     ];
 
-    /**
-     * @var array<int, string>
-     */
     private const CAMPOS_ADMINISTRATIVOS = [
         'estado_formulario_solicitud',
         'estado_documento_identificativo',
@@ -40,9 +34,6 @@ class UpdateSolicitudeDocumentacionRequest extends FormRequest
         return true;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function rules(): array
     {
         $valoresEstados = collect(EstadoDocumento::cases())
@@ -61,9 +52,6 @@ class UpdateSolicitudeDocumentacionRequest extends FormRequest
         return $rules;
     }
 
-    /**
-     * @param  \Illuminate\Validation\Validator  $validator
-     */
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
@@ -86,25 +74,14 @@ class UpdateSolicitudeDocumentacionRequest extends FormRequest
         });
     }
 
-    /**
-     * @return array<int, string>
-     */
     public static function camposTecnicos(): array
     {
         return self::CAMPOS_TECNICOS;
     }
-
-    /**
-     * @return array<int, string>
-     */
     public static function camposAdministrativos(): array
     {
         return self::CAMPOS_ADMINISTRATIVOS;
     }
-
-    /**
-     * @return array<int, string>
-     */
     public static function camposDocumentacion(): array
     {
         return array_merge(self::CAMPOS_TECNICOS, self::CAMPOS_ADMINISTRATIVOS);

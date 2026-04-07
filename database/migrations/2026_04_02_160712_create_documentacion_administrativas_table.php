@@ -14,7 +14,7 @@ public function up(): void
               ->unique()
               ->constrained('solicitudes')
               ->cascadeOnDelete();
-       
+
         $table->string('estado_formulario_solicitud')->nullable();
         $table->string('estado_documento_identificativo')->nullable();
         $table->string('estado_acreditacion_representacion')->nullable();
@@ -27,10 +27,6 @@ public function up(): void
         $table->timestamps();
     });
 }
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('documentaciones_administrativas');

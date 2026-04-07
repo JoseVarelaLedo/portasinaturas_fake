@@ -8,9 +8,6 @@ class SolicitudeDocumentacionService
 {
     private const ESTADO_EMENDAR = 'emendar';
 
-    /**
-     * @return array<string, mixed>
-     */
     public function buildForSolicitude(Solicitude $solicitude): array
     {
         $camposTecnicos = $this->buildCamposTecnicos($solicitude);
@@ -26,9 +23,6 @@ class SolicitudeDocumentacionService
         ];
     }
 
-    /**
-     * @return array<int, array<string, mixed>>
-     */
     public function buildForCollection(iterable $solicitudes): array
     {
         $resultado = [];
@@ -40,9 +34,6 @@ class SolicitudeDocumentacionService
         return $resultado;
     }
 
-    /**
-     * @return array<int, array{campo:string,etiqueta:string,estado:?string}>
-     */
     private function buildCamposTecnicos(Solicitude $solicitude): array
     {
         $documentacionTecnica = $solicitude->documentacionTecnica;
@@ -59,10 +50,6 @@ class SolicitudeDocumentacionService
             ['campo' => 'estado_cronograma', 'etiqueta' => 'Cronograma', 'estado' => $documentacionTecnica?->estado_cronograma, 'motivo' => $motivosEmenda['estado_cronograma'] ?? null],
         ];
     }
-
-    /**
-     * @return array<int, array{campo:string,etiqueta:string,estado:?string}>
-     */
     private function buildCamposAdministrativos(Solicitude $solicitude): array
     {
         $documentacionAdministrativa = $solicitude->documentacionAdministrativa;
@@ -80,9 +67,6 @@ class SolicitudeDocumentacionService
         ];
     }
 
-    /**
-     * @param  array<int, mixed>  $estados
-     */
     private function hasEstadoEmendar(array $estados): bool
     {
         foreach ($estados as $estado) {

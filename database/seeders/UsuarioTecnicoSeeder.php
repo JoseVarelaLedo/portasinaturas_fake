@@ -7,9 +7,7 @@ use Illuminate\Database\Seeder;
 
 class UsuarioTecnicoSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
         UsuarioTecnico::factory()->count(17)->create();

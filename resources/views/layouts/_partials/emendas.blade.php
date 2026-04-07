@@ -53,6 +53,7 @@
 
                 <button class="boton_formulario" type="submit" id="boton-xerar-remesa" hidden disabled>
                     Xerar Remesa
+                    <!--TODO implementar lóxica de chamada a servizos de NOTIFICACIÓN a destinatarios remesa -->
                 </button>
 
                 <ul class="lista_elementos">

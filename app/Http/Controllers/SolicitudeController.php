@@ -275,8 +275,10 @@ class SolicitudeController extends Controller
         $solicitude->estado_solicitude = $request->input('estado_solicitude');
         $solicitude->save();
 
+        $openDialog = $request->input('open_dialog', 'detalle-solicitude-' . $solicitude->id);
+
         return redirect()
-            ->route('solicitude.listado', ['open_dialog' => 'detalle-solicitude-' . $solicitude->id])
+            ->route('solicitude.listado', ['open_dialog' => $openDialog])
             ->with('success', 'Estado da solicitude actualizado correctamente.');
     }
 }

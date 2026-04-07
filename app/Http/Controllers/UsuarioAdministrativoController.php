@@ -16,11 +16,11 @@ class UsuarioAdministrativoController extends Controller
 
     public function create()
     {
-        //TODO
+        //
     }
 
     public function store(Request $request)
     {
-        //TODO
+        //
     }
 }

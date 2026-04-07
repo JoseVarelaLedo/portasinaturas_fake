@@ -11,13 +11,11 @@ return new class extends Migration
         Schema::create('documentaciones_tecnicas', function (Blueprint $table) {
             $table->id();
 
-            // Relación 1:1
             $table->foreignId('solicitude_id')
                 ->unique()
                 ->constrained('solicitudes')
                 ->cascadeOnDelete();
 
-            // Estados (string)
             $table->string('estado_memoria_tecnica')->nullable();
             $table->string('estado_presupuesto')->nullable();
             $table->string('estado_ofertas_proveedores')->nullable();

@@ -5,28 +5,15 @@ namespace Database\Factories;
 use App\Models\Solicitante;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Solicitante>
- */
 class SolicitanteFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var class-string<Solicitante>
-     */
     protected $model = Solicitante::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
             'nome' => fake()->name(),
-            'email'         => fake()->email(),
+            'email' => fake()->unique()->safeEmail(),
             'telefono' => fake()->numerify(
                 fake()->randomElement(['6########', '7########', '9########'])
             ),

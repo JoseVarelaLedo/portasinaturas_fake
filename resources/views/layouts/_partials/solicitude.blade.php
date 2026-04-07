@@ -3,10 +3,16 @@
 @section('list')
     <section class="contedor_decorado contedor_listado">
         <div class="contedor_contido_decorado">
+            @if (old('open_dialog'))
+                <div style="display:none" data-open-dialog-old="{{ old('open_dialog') }}"></div>
+            @endif
             @if (session('success'))
                 <div class="campo_formulario" style="color:#166534;" data-solicitude-success="{{ session('success') }}">
                     <span>{{ session('success') }}</span>
                 </div>
+            @endif
+            @if ($errors->has('estado_solicitude'))
+                <div class="campo_formulario" style="display:none" data-estado-solicitude-error="{{ $errors->first('estado_solicitude') }}"></div>
             @endif
 
             <form method="GET" action="{{ route('solicitude.listado') }}" style="margin: 1rem 0; display: flex; gap: .75rem; flex-wrap: wrap; align-items: center;">

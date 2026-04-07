@@ -20,6 +20,7 @@ class UpdateEstadoSolicitudeRequest extends FormRequest
 
         return [
             'estado_solicitude' => ['required', 'in:' . implode(',', $valoresEstados)],
+            'open_dialog' => ['nullable', 'string', 'regex:/^detalle-(solicitude|documentacion)-\d+$/'],
         ];
     }
 
@@ -31,7 +32,7 @@ class UpdateEstadoSolicitudeRequest extends FormRequest
 
                 if (!$solicitude->canBeApproved()) {
                     $camposProblematicos = $solicitude->getBlockingDocumentationFields();
-                    $mensaje = 'No se puede aprobar la solicitud mientras haya documentación en estado de revisión, emendar, pendiente o rexeitada. ';
+                    $mensaje = 'Non se pode aprobar a solicitude mentras haxa documentación en estado de revisión, emendar, pendente ou rexeitada. ';
                     $mensaje .= 'Campos problemáticos: ' . implode(', ', $camposProblematicos) . '.';
 
                     $validator->errors()->add(

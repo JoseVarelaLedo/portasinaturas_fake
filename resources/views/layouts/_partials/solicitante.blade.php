@@ -48,11 +48,12 @@
                                 </summary>
 
                                 <div class="contenido_desplegable">
-                                    <div class="fila_elemento_datos">
+                                    <div class="fila_elemento_datos fila_elemento_datos_solicitante">
                                         <span><b>Dirección:</b> {{ $solicitante->direccion }}, <b>Localidade:</b>
                                             {{ $solicitante->cidade }}</span>
                                         <span><b>Provincia:</b> {{ $solicitante->provincia }}, <b>Código Postal:</b>
                                             {{ $solicitante->codigo_postal }} <b>País:</b> {{ $solicitante->pais }}</span>
+                                        <span><b>Email:</b> {{ $solicitante->email ?? 'N/D' }}</span>
                                     </div>
                                 </div>
                             </details>

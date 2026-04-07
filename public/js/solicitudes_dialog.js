@@ -57,13 +57,19 @@ const syncEmendaMotivoVisibility = (estadoSelect) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(globalThis.location.search);
-    const openDialogId = params.get('open_dialog');
+    const openDialogFromQuery = params.get('open_dialog');
+    const openDialogFromOldInput = document.querySelector('[data-open-dialog-old]')?.dataset?.openDialogOld;
+    const openDialogId = openDialogFromQuery || openDialogFromOldInput;
 
     if (!openDialogId) {
         return;
     }
 
     openDialogById(openDialogId);
+
+    if (!openDialogFromQuery) {
+        return;
+    }
 
     params.delete('open_dialog');
     const nextQuery = params.toString();

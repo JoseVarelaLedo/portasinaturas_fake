@@ -111,7 +111,7 @@ body {
 }
 
 .contedor_listado {
-    width: min(840px, calc(100% - 3rem));
+    width: min(1160px, calc(100% - 2rem));
 }
 
 .contedor_contido_decorado {
@@ -261,11 +261,23 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.fila_superior .desplegable_solicitante {
+    flex: 1 1 30rem;
+    min-width: 0;
 }
 
 .fila_elemento_datos {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.fila_elemento_datos_solicitante {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
 }
 .desplegable_solicitante {
     width: 100%;
@@ -336,8 +348,8 @@ body {
 }
 
 .boton_detalle_solicitude_denegada_desistida {
-    border-color: #c8b5e0;
-    background: #f3e8ff;
+    border-color: #b5c8e0;
+    background: #e8edff;
 }
 
 .boton_detalle_solicitude_denegada_desistida:hover {

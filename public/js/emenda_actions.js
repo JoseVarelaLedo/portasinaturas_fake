@@ -1,4 +1,45 @@
 document.addEventListener('submit', (event) => {
+    const approveForm = event.target.closest('.form_aprobar_solicitude');
+
+    if (approveForm) {
+        if (approveForm.dataset.swalConfirmed === '1') {
+            delete approveForm.dataset.swalConfirmed;
+            return;
+        }
+
+        event.preventDefault();
+
+        if (globalThis.Swal) {
+            const dialog = approveForm.closest('dialog');
+
+            globalThis.Swal.fire({
+                target: dialog ?? document.body,
+                icon: 'question',
+                title: 'Aprobar solicitude',
+                text: 'Seguro que queres aprobar esta solicitude?',
+                showCancelButton: true,
+                confirmButtonText: 'Si, aprobar',
+                cancelButtonText: 'Cancelar',
+            }).then((result) => {
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                approveForm.dataset.swalConfirmed = '1';
+                approveForm.requestSubmit();
+            });
+
+            return;
+        }
+
+        if (globalThis.confirm('Seguro que queres aprobar esta solicitude?')) {
+            approveForm.dataset.swalConfirmed = '1';
+            approveForm.requestSubmit();
+        }
+
+        return;
+    }
+
     const form = event.target.closest('.form_xerar_emenda');
 
     if (!form) {
@@ -37,4 +78,26 @@ document.addEventListener('submit', (event) => {
     }
 
     globalThis.alert(text);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const errorContainer = document.querySelector('[data-estado-solicitude-error]');
+    const errorMessage = errorContainer?.dataset?.estadoSolicitudeError;
+
+    if (!errorMessage) {
+        return;
+    }
+
+    if (globalThis.Swal) {
+        globalThis.Swal.fire({
+            icon: 'warning',
+            title: 'Non se puido aprobar',
+            text: errorMessage,
+            confirmButtonText: 'Entendido',
+        });
+
+        return;
+    }
+
+    globalThis.alert(errorMessage);
 });
