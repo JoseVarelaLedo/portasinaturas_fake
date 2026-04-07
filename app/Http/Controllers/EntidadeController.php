@@ -12,6 +12,16 @@ class EntidadeController extends Controller
     public function index(Request $request): View
     {
         $busqueda = trim((string) $request->query('search', ''));
+        $camposOrdenables = [
+            'nome' => 'Nome',
+            'cif' => 'CIF',
+        ];
+        $ordenPor = (string) $request->query('sort_by', 'nome');
+        if (!array_key_exists($ordenPor, $camposOrdenables)) {
+            $ordenPor = 'nome';
+        }
+
+        $direccion = strtolower((string) $request->query('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         $entidades = Entidade::query()
             ->when($busqueda !== '', function ($query) use ($busqueda) {
@@ -23,11 +33,11 @@ class EntidadeController extends Controller
                         ->orWhere('cif', 'like', $like);
                 });
             })
-            ->orderBy('nome')
+            ->orderBy($ordenPor, $direccion)
             ->paginate(15)
             ->withQueryString();
 
-        return view("layouts._partials.entidades", compact('entidades', 'busqueda'));
+        return view("layouts._partials.entidades", compact('entidades', 'busqueda', 'camposOrdenables', 'ordenPor', 'direccion'));
     }
 
     public function create(): View

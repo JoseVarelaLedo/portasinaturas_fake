@@ -13,6 +13,22 @@ class SolicitanteController extends Controller
     public function index(Request $request): View
     {
         $busqueda = trim((string) $request->query('search', ''));
+        $camposOrdenables = [
+            'nome' => 'Nome',
+            'nif_cif' => 'NIF/CIF',
+            'email' => 'Email',
+            'direccion' => 'Direccion',
+            'cidade' => 'Localidade',
+            'provincia' => 'Provincia',
+            'codigo_postal' => 'Codigo postal',
+            'pais' => 'Pais',
+        ];
+        $ordenPor = (string) $request->query('sort_by', 'nome');
+        if (!array_key_exists($ordenPor, $camposOrdenables)) {
+            $ordenPor = 'nome';
+        }
+
+        $direccion = strtolower((string) $request->query('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         $solicitantes = Solicitante::query()
             ->when($busqueda !== '', function ($query) use ($busqueda) {
@@ -30,11 +46,11 @@ class SolicitanteController extends Controller
                         ->orWhere('pais', 'like', $like);
                 });
             })
-            ->orderBy('nome')
+            ->orderBy($ordenPor, $direccion)
             ->paginate(15)
             ->withQueryString();
 
-        return view("layouts._partials.solicitante", compact('solicitantes', 'busqueda'));
+        return view("layouts._partials.solicitante", compact('solicitantes', 'busqueda', 'camposOrdenables', 'ordenPor', 'direccion'));
     }
     public function create(): View
     {

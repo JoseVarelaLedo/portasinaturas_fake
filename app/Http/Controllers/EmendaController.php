@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Emenda;
+use App\Models\Remesa;
 use App\Models\Solicitude;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -13,8 +14,23 @@ class EmendaController extends Controller
     public function index(Request $request): View
     {
         $busqueda = trim((string) $request->query('search', ''));
+        $camposOrdenables = [
+            'id' => 'ID emenda',
+            'id_solicitude' => 'ID solicitude',
+            'solicitante_nome' => 'Solicitante',
+            'admin_nome' => 'Admin',
+            'tecnico_nome' => 'Tecnico',
+            'remesa_grupo' => 'Remesa',
+        ];
+        $ordenPor = (string) $request->query('sort_by', 'id');
+        if (!array_key_exists($ordenPor, $camposOrdenables)) {
+            $ordenPor = 'id';
+        }
 
-        $emendas = Emenda::query()
+        $direccionSolicitada = strtolower((string) $request->query('sort_dir', 'desc'));
+        $direccion = in_array($direccionSolicitada, ['asc', 'desc'], true) ? $direccionSolicitada : 'desc';
+
+        $emendasQuery = Emenda::query()
             ->with([
                 'solicitude.solicitante',
                 'solicitude.usuarioAdministrativo',
@@ -52,11 +68,46 @@ class EmendaController extends Controller
                             $remesaQuery->where('remesa_grupo', 'like', $like);
                         });
                 });
-            })
-            ->orderByDesc('id')
-            ->get();
+            });
 
-        return view('layouts._partials.emendas', compact('emendas', 'busqueda'));
+        if ($ordenPor === 'solicitante_nome') {
+            $emendasQuery->orderBy(
+                Solicitude::select('nome_solicitante')
+                    ->whereColumn('solicitudes.id', 'emendas.id_solicitude')
+                    ->limit(1),
+                $direccion
+            );
+        } elseif ($ordenPor === 'admin_nome') {
+            $emendasQuery->orderBy(
+                Solicitude::select('usuario_administrativos.nome')
+                    ->leftJoin('usuario_administrativos', 'usuario_administrativos.id', '=', 'solicitudes.id_usuario_admin')
+                    ->whereColumn('solicitudes.id', 'emendas.id_solicitude')
+                    ->limit(1),
+                $direccion
+            );
+        } elseif ($ordenPor === 'tecnico_nome') {
+            $emendasQuery->orderBy(
+                Solicitude::select('usuario_tecnicos.nome')
+                    ->leftJoin('usuario_tecnicos', 'usuario_tecnicos.id', '=', 'solicitudes.id_usuario_tecnico')
+                    ->whereColumn('solicitudes.id', 'emendas.id_solicitude')
+                    ->limit(1),
+                $direccion
+            );
+        } elseif ($ordenPor === 'remesa_grupo') {
+            $emendasQuery->orderBy(
+                Remesa::select('remesa_grupo')
+                    ->whereColumn('remesas.id_emenda', 'emendas.id')
+                    ->orderByDesc('remesas.id')
+                    ->limit(1),
+                $direccion
+            );
+        } else {
+            $emendasQuery->orderBy($ordenPor, $direccion);
+        }
+
+        $emendas = $emendasQuery->get();
+
+        return view('layouts._partials.emendas', compact('emendas', 'busqueda', 'camposOrdenables', 'ordenPor', 'direccion'));
     }
 
     public function store(Request $request): RedirectResponse

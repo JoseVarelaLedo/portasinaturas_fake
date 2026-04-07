@@ -25,11 +25,28 @@
                     placeholder="Buscar por emenda, solicitude, solicitante, usuarios ou remesa"
                     style="flex: 1 1 24rem; min-width: 16rem; padding: .7rem .9rem; border: 1px solid #d1d5db; border-radius: .5rem;"
                 >
+                <input type="hidden" name="sort_by" value="{{ $ordenPor ?? 'id' }}">
+                <input type="hidden" name="sort_dir" value="{{ $direccion ?? 'desc' }}">
                 <button class="boton_formulario" type="submit">Buscar</button>
                 @if (!empty($busqueda))
                     <a class="boton_secundario_dialog" href="{{ route('emenda.listado') }}" style="text-decoration:none;">Limpar</a>
                 @endif
             </form>
+
+            <div style="display:flex; flex-wrap:wrap; gap:.45rem; margin: .35rem 0 1rem 0;">
+                @foreach ($camposOrdenables as $campo => $etiqueta)
+                    @php
+                        $activo = ($ordenPor ?? 'id') === $campo;
+                        $novaDireccion = $activo && ($direccion ?? 'desc') === 'asc' ? 'desc' : 'asc';
+                        $query = array_merge(request()->except(['page']), ['sort_by' => $campo, 'sort_dir' => $novaDireccion]);
+                    @endphp
+                    <a class="boton_secundario_dialog"
+                        href="{{ route('emenda.listado', $query) }}"
+                        style="text-decoration:none; {{ $activo ? 'font-weight:700; border-color:#0f766e;' : '' }}">
+                        {{ $etiqueta }}{{ $activo ? ' (' . strtoupper($direccion ?? 'desc') . ')' : '' }}
+                    </a>
+                @endforeach
+            </div>
 
             <form method="POST" action="{{ route('remesa.store') }}" id="form-remesa">
                 @csrf

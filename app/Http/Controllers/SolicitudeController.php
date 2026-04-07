@@ -23,6 +23,22 @@ class SolicitudeController extends Controller
     public function index(Request $request, SolicitudeDocumentacionService $documentacionService): View
     {
         $busqueda = trim((string) $request->query('search', ''));
+        $camposOrdenables = [
+            'id' => 'ID',
+            'nome_solicitante' => 'Nome solicitante',
+            'solicitante_nif' => 'NIF/CIF',
+            'nome_entidade' => 'Entidade',
+            'estado_solicitude' => 'Estado',
+            'admin_nome' => 'Admin',
+            'tecnico_nome' => 'Tecnico',
+        ];
+        $ordenPor = (string) $request->query('sort_by', 'id');
+        if (!array_key_exists($ordenPor, $camposOrdenables)) {
+            $ordenPor = 'id';
+        }
+
+        $direccionSolicitada = strtolower((string) $request->query('sort_dir', 'desc'));
+        $direccion = in_array($direccionSolicitada, ['asc', 'desc'], true) ? $direccionSolicitada : 'desc';
 
         $solicitudes = Solicitude::query()
             ->with([
@@ -87,8 +103,34 @@ class SolicitudeController extends Controller
                                 ->orWhere('estado_cronograma', 'like', $like);
                         });
                 });
-            })
-            ->orderByDesc('id')
+            });
+
+        if ($ordenPor === 'solicitante_nif') {
+            $solicitudes->orderBy(
+                Solicitante::select('nif_cif')
+                    ->whereColumn('solicitantes.id', 'solicitudes.id_solicitante')
+                    ->limit(1),
+                $direccion
+            );
+        } elseif ($ordenPor === 'admin_nome') {
+            $solicitudes->orderBy(
+                UsuarioAdministrativo::select('nome')
+                    ->whereColumn('usuario_administrativos.id', 'solicitudes.id_usuario_admin')
+                    ->limit(1),
+                $direccion
+            );
+        } elseif ($ordenPor === 'tecnico_nome') {
+            $solicitudes->orderBy(
+                UsuarioTecnico::select('nome')
+                    ->whereColumn('usuario_tecnicos.id', 'solicitudes.id_usuario_tecnico')
+                    ->limit(1),
+                $direccion
+            );
+        } else {
+            $solicitudes->orderBy($ordenPor, $direccion);
+        }
+
+        $solicitudes = $solicitudes
             ->paginate(10)
             ->withQueryString();
 
@@ -103,7 +145,7 @@ class SolicitudeController extends Controller
             ->values()
             ->all();
 
-        return view("layouts._partials.solicitude", compact("solicitudes", "documentacionPorSolicitude", "estadosDocumento", "usuariosAdministrativos", "usuariosTecnicos", 'busqueda'));
+        return view("layouts._partials.solicitude", compact("solicitudes", "documentacionPorSolicitude", "estadosDocumento", "usuariosAdministrativos", "usuariosTecnicos", 'busqueda', 'camposOrdenables', 'ordenPor', 'direccion'));
     }
 
     public function create(): View|RedirectResponse
